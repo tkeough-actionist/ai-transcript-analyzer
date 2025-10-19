@@ -305,7 +305,6 @@ def chat():
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": f"Answer using only this context:\n\n{context}\n\nQuestion: {user_input}"}
             ],
-            temperature=0.1
         ).choices[0].message.content.strip()
 
         # --- log to rag_query_history ---
