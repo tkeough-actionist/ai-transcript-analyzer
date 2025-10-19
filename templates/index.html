@@ -103,11 +103,32 @@ header p { margin: 0.25rem 0 0 0; font-size: 0.95rem; opacity: 0.9; }
   display: block;
   margin: 4px 0;
   cursor: pointer;
+  border: 1px solid #493a50;
+  border-radius: 5px;
+  padding: 4px 6px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 .sidebar input[type="checkbox"] {
   margin-right: 6px;
   accent-color: #b18fcf;
 }
+.sidebar .select-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.sidebar .select-buttons button {
+  background: #b18fcf;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+.sidebar .select-buttons button:hover { background: #9a77bb; }
 
 @media (max-width: 900px) {
   .sidebar { width: 180px; font-size: 0.8rem; }
@@ -312,6 +333,10 @@ header p { margin: 0.25rem 0 0 0; font-size: 0.95rem; opacity: 0.9; }
 <!-- ===== SIDEBAR ===== -->
 <div class="sidebar" id="fileSidebar">
   <h3>Filter by Transcript</h3>
+  <div class="select-buttons">
+    <button id="selectAll">Select All</button>
+    <button id="deselectAll">Deselect All</button>
+  </div>
   <div id="fileList">Loading...</div>
 </div>
 
@@ -385,6 +410,14 @@ document.getElementById("toggleSidebar").addEventListener("click", () => {
   sidebar.classList.toggle("hidden");
 });
 
+// Select / Deselect all logic
+document.getElementById("selectAll").addEventListener("click", () => {
+  document.querySelectorAll("#fileList input[type='checkbox']").forEach(cb => cb.checked = true);
+});
+document.getElementById("deselectAll").addEventListener("click", () => {
+  document.querySelectorAll("#fileList input[type='checkbox']").forEach(cb => cb.checked = false);
+});
+
 function appendMessage(content, className) {
   const div = document.createElement("div");
   div.className = "chat-message " + className;
@@ -397,10 +430,8 @@ async function sendMessage() {
   const message = userInput.value.trim();
   if (!message) return;
 
-  // collect checked files
   const selectedFiles = Array.from(document.querySelectorAll("#fileList input[type='checkbox']:checked"))
     .map(cb => cb.value);
-  console.log("Selected files:", selectedFiles); // debug log
 
   if (welcomeScreen.style.display !== "none") {
     welcomeScreen.style.display = "none";
@@ -420,10 +451,7 @@ async function sendMessage() {
     const response = await fetch("/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        message,
-        selected_files: selectedFiles  // ✅ added
-      }),
+      body: JSON.stringify({ message, selected_files: selectedFiles }),
     });
 
     const data = await response.json();
@@ -436,7 +464,6 @@ async function sendMessage() {
 
   sendButton.disabled = false;
 }
-
 
 sendButton.addEventListener("click", sendMessage);
 userInput.addEventListener("keypress", (e) => {
