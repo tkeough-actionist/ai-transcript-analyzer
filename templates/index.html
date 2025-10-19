@@ -397,6 +397,11 @@ async function sendMessage() {
   const message = userInput.value.trim();
   if (!message) return;
 
+  // collect checked files
+  const selectedFiles = Array.from(document.querySelectorAll("#fileList input[type='checkbox']:checked"))
+    .map(cb => cb.value);
+  console.log("Selected files:", selectedFiles); // debug log
+
   if (welcomeScreen.style.display !== "none") {
     welcomeScreen.style.display = "none";
     chatContainer.style.display = "flex";
@@ -415,8 +420,12 @@ async function sendMessage() {
     const response = await fetch("/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({
+        message,
+        selected_files: selectedFiles  // ✅ added
+      }),
     });
+
     const data = await response.json();
     typing.remove();
     appendMessage(data.response || ("Error: " + data.error), "bot");
@@ -427,6 +436,7 @@ async function sendMessage() {
 
   sendButton.disabled = false;
 }
+
 
 sendButton.addEventListener("click", sendMessage);
 userInput.addEventListener("keypress", (e) => {
