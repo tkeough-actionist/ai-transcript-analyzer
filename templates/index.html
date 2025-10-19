@@ -87,6 +87,8 @@ header p { margin: 0.25rem 0 0 0; font-size: 0.95rem; opacity: 0.9; }
   z-index: 50;
   opacity: 0.95;
   transition: transform 0.3s ease, opacity 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 .sidebar.hidden {
   transform: translateX(-260px);
@@ -129,6 +131,24 @@ header p { margin: 0.25rem 0 0 0; font-size: 0.95rem; opacity: 0.9; }
   cursor: pointer;
 }
 .sidebar .select-buttons button:hover { background: #9a77bb; }
+
+/* Scrollable transcript list */
+#fileList {
+  flex: 1;
+  overflow-y: auto;
+  max-height: calc(100vh - 220px);
+  padding-right: 6px;
+}
+#fileList::-webkit-scrollbar {
+  width: 6px;
+}
+#fileList::-webkit-scrollbar-thumb {
+  background-color: #705d7a;
+  border-radius: 3px;
+}
+#fileList::-webkit-scrollbar-thumb:hover {
+  background-color: #8a77a0;
+}
 
 @media (max-width: 900px) {
   .sidebar { width: 180px; font-size: 0.8rem; }
@@ -265,62 +285,6 @@ header p { margin: 0.25rem 0 0 0; font-size: 0.95rem; opacity: 0.9; }
   color: #888;
   margin-top: 0.3rem;
 }
-
-/* ===== MODAL ===== */
-.modal {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.55);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  z-index: 1000;
-}
-.modal-content {
-  position: relative;
-  background: #fff;
-  border-radius: 10px;
-  max-width: 720px;
-  padding: 2.5rem;
-  box-shadow: 0 4px 25px rgba(0,0,0,0.3);
-  text-align: left;
-  overflow-y: auto;
-  max-height: 85vh;
-}
-.modal h2 {
-  color: #2f1d34;
-  margin-top: 0;
-  font-size: 1.6rem;
-  border-bottom: 3px solid #ffc72c;
-  padding-bottom: 0.5rem;
-}
-.modal h3 { margin-top: 1.5rem; color: #2b2b2b; font-size: 1.1rem; }
-.modal p { font-size: 1rem; line-height: 1.65; margin-top: 0.5rem; }
-.close-x {
-  position: absolute;
-  top: 12px; right: 16px;
-  font-size: 1.4rem;
-  color: #2f1d34;
-  cursor: pointer;
-  font-weight: bold;
-}
-.close-x:hover { color: #800000; }
-.contact-info { margin-top: 2rem; font-size: 0.95rem; color: #444; }
-.contact-info a { color: #990000; text-decoration: none; font-weight: 600; }
-.close-btn {
-  background-color: #990000;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 0.7rem 1.4rem;
-  cursor: pointer;
-  font-weight: 600;
-  float: right;
-  margin-top: 1.8rem;
-}
-.close-btn:hover { background-color: #800000; }
 </style>
 </head>
 
@@ -338,23 +302,6 @@ header p { margin: 0.25rem 0 0 0; font-size: 0.95rem; opacity: 0.9; }
     <button id="deselectAll">Deselect All</button>
   </div>
   <div id="fileList">Loading...</div>
-</div>
-
-<!-- ===== MODAL ===== -->
-<div id="intro-modal" class="modal">
-  <div class="modal-content">
-    <span class="close-x" onclick="closeModal()">×</span>
-    <h2>Welcome to the MOR 565 AI Teaching Assistant</h2>
-    <p>This digital assistant supports <strong>MOR 565: Alliances & Cooperative Strategy (Spring 2025)</strong>, taught by <strong>Professor Kyle Mayer</strong> with support from <strong>Ty Keough, Teaching Assistant</strong>, at the <strong>USC Marshall School of Business</strong>.</p>
-    <p>Developed as part of the <strong>Marshall AI Strategy Initiative</strong>, this system represents a new model for academic engagement — blending advanced language models with curated course materials to create an intelligent, retrieval-based learning companion.</p>
-    <h3>Purpose</h3>
-    <p>• Operates within the academic and ethical framework of the course.<br>• Maintains an MBA-level standard of clarity, professionalism, and analytical rigor.<br>• Uses only verified course content and does not fabricate information.<br>• Defers all grading, policy, and administrative matters to Professor Mayer.</p>
-    <div class="contact-info">
-      <p><strong>Created and Monitored by:</strong> Ty Keough, USC Marshall MS Finance Class of 2026</p>
-      <p><a href="https://www.linkedin.com/in/tykeough/" target="_blank">LinkedIn</a> | <a href="mailto:tkeough@marshall.usc.edu">tkeough@marshall.usc.edu</a></p>
-    </div>
-    <button class="close-btn" onclick="closeModal()">Enter Assistant</button>
-  </div>
 </div>
 
 <!-- ===== MAIN CONTENT ===== -->
@@ -468,19 +415,6 @@ async function sendMessage() {
 sendButton.addEventListener("click", sendMessage);
 userInput.addEventListener("keypress", (e) => {
   if (e.key === "Enter") sendMessage();
-});
-
-function closeModal() {
-  document.getElementById("intro-modal").style.display = "none";
-  document.body.style.overflow = "hidden";
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const modal = document.getElementById("intro-modal");
-  if (!sessionStorage.getItem("popupShown")) {
-    modal.style.display = "flex";
-    sessionStorage.setItem("popupShown", "true");
-  }
 });
 
 window.addEventListener("load", () => {
