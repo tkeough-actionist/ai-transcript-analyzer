@@ -28,11 +28,11 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")
 
 EMBED_MODEL = "text-embedding-3-large"
-CHAT_MODEL  = "gpt-4o-mini"
+CHAT_MODEL  = "gpt-5-mini"
 VECTOR_DIM  = 3072
-TOP_K = 10
-CHUNK_SIZE = 500
-CHUNK_OVERLAP = 100
+TOP_K = 5
+CHUNK_SIZE = 200
+CHUNK_OVERLAP = 40
 BUCKET = "materials"
 
 # -------- clients --------
@@ -305,7 +305,7 @@ def chat():
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": f"Answer using only this context:\n\n{context}\n\nQuestion: {user_input}"}
             ],
-            temperature=0.2
+            temperature=0.1
         ).choices[0].message.content.strip()
 
         # --- log to rag_query_history ---
