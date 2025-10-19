@@ -3,46 +3,56 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Manage Course Files</title>
+<title>Manage Files</title>
 <link rel="icon" href="/static/favicon.ico">
 
 <style>
 :root {
-  --cardinal:#990000; --gold:#ffd700; --ink:#222;
-  --muted:#777; --bg:#f8f8f8; --panel:#fff; --line:#e7e7e7;
+  --main:#2f1d34; 
+  --accent:#b18fcf; 
+  --accent-hover:#9a77bb;
+  --dark-orange:#401503;
+  --light-orange:#fd5500;
+  --ink:#222;
+  --muted:#777; 
+  --bg:#f8f8f8; 
+  --panel:#fff; 
+  --line:#e7e7e7;
 }
 *{box-sizing:border-box}
 body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
 .frame{max-width:1100px;margin:28px auto;background:var(--panel);border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:22px;min-height:720px;display:flex;flex-direction:column;position:relative}
-h2{margin:0 0 8px;color:var(--cardinal)}
-.rule{height:2px;background:var(--gold);width:100%;margin:6px 0 18px;border-radius:2px}
+h2{margin:0 0 8px;color:var(--main)}
+.rule{height:2px;background:var(--accent);width:100%;margin:6px 0 18px;border-radius:2px}
 .drop{border:2px dashed #cfcfcf;border-radius:10px;padding:22px;text-align:center;background:#fafafa;margin-bottom:12px;transition:background .2s,border-color .2s}
-.drop.drag{border-color:var(--cardinal);background:#fff6f6}
-.btn{background:var(--cardinal);color:#fff;border:0;border-radius:8px;padding:9px 14px;font-size:.92rem;cursor:pointer;transition:opacity .2s,background .2s}
+.drop.drag{border-color:var(--main);background:#f3f0f7}
+.btn{background:var(--main);color:#fff;border:0;border-radius:8px;padding:9px 14px;font-size:.92rem;cursor:pointer;transition:opacity .2s,background .2s}
+.btn:hover{background:var(--accent-hover)}
 .btn.secondary{background:#f3f3f3;color:#333}
-.btn.danger{background:#b11226}
+.btn.danger{background:var(--dark-orange)}
+.btn.danger:hover{background:var(--light-orange)}
 .btn:disabled{opacity:.5;cursor:not-allowed}
 .bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0}
 .bar input[type="text"]{flex:1;border:1px solid #d5d5d5;border-radius:8px;padding:9px 12px}
 .progress{display:none;align-items:center;gap:10px;margin:8px 0}
 .progress .track{flex:1;height:10px;background:#eee;border-radius:8px;overflow:hidden}
-.progress .fill{height:100%;width:0;background:var(--cardinal);transition:width .15s linear}
+.progress .fill{height:100%;width:0;background:var(--main);transition:width .15s linear}
 table{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden}
 thead{background:#f6f6f6}
 th,td{padding:11px 12px;border-bottom:1px solid var(--line);font-size:.92rem}
-tbody tr:hover{background:#fff6f6}
+tbody tr:hover{background:#f3f0f7}
 .muted{color:var(--muted)}
 .row-actions{display:flex;gap:8px;justify-content:flex-end}
 .notice {
   position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-  background: var(--cardinal); color: #fff; padding: 10px 18px;
+  background: var(--main); color: #fff; padding: 10px 18px;
   border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,.2);
   opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
   font-size: 0.9rem; z-index: 1000;
 }
 .notice.show { opacity: 1; }
 #accessDenied {
-  margin: 80px auto; text-align: center; color: #990000;
+  margin: 80px auto; text-align: center; color: var(--main);
   font-size: 1.2rem; display: none;
 }
 tr.fade-in {animation: fadeIn .4s ease;}
@@ -59,7 +69,7 @@ tr.fade-in {animation: fadeIn .4s ease;}
   background: var(--panel); border-radius: 10px; padding: 20px 26px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.2); max-width: 400px; text-align: center;
 }
-.modal h3 { margin-top: 0; color: var(--cardinal); font-size: 1.1rem; }
+.modal h3 { margin-top: 0; color: var(--main); font-size: 1.1rem; }
 .modal p { font-size: 0.95rem; color: var(--ink); margin: 12px 0 18px; }
 .modal .actions { display: flex; justify-content: center; gap: 12px; }
 </style>
@@ -136,7 +146,7 @@ async function checkAdminAccess() {
 checkAdminAccess();
 
 /* ---- Notifications ---- */
-function showNotice(msg, color="var(--cardinal)") {
+function showNotice(msg, color="var(--main)") {
   const n = document.createElement('div');
   n.className = 'notice show';
   n.style.background = color;
@@ -255,7 +265,7 @@ window.deleteFile = async function(name){
   });
   files = files.filter(f=>f.file_name!==name);
   renderFiles();
-  showNotice(`${name} deleted`,"#b11226");
+  showNotice(`${name} deleted`, "var(--dark-orange)");
 }
 
 $('#deleteBtn').addEventListener('click', async ()=>{
@@ -271,7 +281,7 @@ $('#deleteBtn').addEventListener('click', async ()=>{
     })
   ));
   files = files.filter(f => !selected.has(f.file_name));
-  showNotice(`${selected.size} file(s) deleted`,"#b11226");
+  showNotice(`${selected.size} file(s) deleted`,"var(--dark-orange)");
   selected.clear();
   renderFiles();
 });
@@ -328,7 +338,7 @@ async function uploadFiles(list){
 
 async function refreshAfterUpload(){
   try {
-    const res = await fetch("/api/files?_t=" + Date.now()); // cache-busting
+    const res = await fetch("/api/files?_t=" + Date.now());
     files = await res.json();
     renderFiles();
   } catch (err) {
@@ -357,12 +367,12 @@ async function uploadFile(file){
         if(newList.some(f=>f.file_name===file.name))
           showNotice(`${file.name} uploaded (delayed sync)`,"#198754");
         else
-          showNotice(`Upload failed: ${file.name}`,"#b11226");
+          showNotice(`Upload failed: ${file.name}`,"var(--dark-orange)");
       }
       resolve();
     };
-    xhr.onerror = ()=>{ showNotice(`Error uploading ${file.name}`,"#b11226"); resolve(); };
-    xhr.ontimeout = ()=>{ showNotice(`${file.name} timed out`,"#b11226"); resolve(); };
+    xhr.onerror = ()=>{ showNotice(`Error uploading ${file.name}`,"var(--dark-orange)"); resolve(); };
+    xhr.ontimeout = ()=>{ showNotice(`${file.name} timed out`,"var(--dark-orange)"); resolve(); };
     const form=new FormData();
     form.append("file", file);
     xhr.send(form);
