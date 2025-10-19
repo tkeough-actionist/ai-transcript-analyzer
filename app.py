@@ -281,8 +281,11 @@ def delete_file(name):
 @app.route("/chat", methods=["POST"])
 @require_login
 def chat():
-    user_input = request.json.get("message", "").strip()
-    selected_files = request.json.get("selectedFiles", [])  # ✅ new line
+    data = request.get_json(force=True) or {}
+    user_input = data.get("message", "").strip()
+    selected_files = data.get("selected_files", [])  # ✅ correct key + robust parsing
+    log(f"🎯 Selected files: {selected_files}")
+
 
     if not user_input:
         return jsonify({"error": "No input provided"}), 400
