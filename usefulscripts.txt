@@ -6,4 +6,4 @@ set raw_user_meta_data = jsonb_set(
   '{role}',
   '"admin"'
 )
-where email = 'xxx@email.com';'
+where email = 'xxx@email.com';
