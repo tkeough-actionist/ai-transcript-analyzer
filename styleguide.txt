@@ -1,0 +1,5 @@
+Main dark purple #2f1d34
+Accent light purple #b18fcf
+
+Dark orange #401503
+Light orange #fd5500
