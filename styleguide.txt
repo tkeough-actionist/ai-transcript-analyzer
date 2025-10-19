@@ -1,5 +1,6 @@
 Main dark purple #2f1d34
 Accent light purple #b18fcf
+Accent button hover purple #9a77bb
 
 Dark orange #401503
 Light orange #fd5500
