@@ -28,7 +28,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")
 
 EMBED_MODEL = "text-embedding-3-large"
-CHAT_MODEL  = "gpt-5-mini"
+CHAT_MODEL  = "gpt-4o-mini"
 VECTOR_DIM  = 3072
 TOP_K = 5
 CHUNK_SIZE = 200
